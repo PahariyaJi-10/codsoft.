@@ -1,12 +1,15 @@
 package com.divyansh.alarmclockapp
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAlarm
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -52,57 +55,115 @@ fun HomeScreen() {
         }
     ) { padding ->
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    )
+                )
                 .padding(padding)
-                .padding(24.dp),
-
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
 
-            Text(
-                text = "Alarm Clock App",
-                fontSize = 28.sp
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Text(
-                text = time,
-                fontSize = 42.sp
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = date
-            )
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Card(
-                modifier = Modifier.fillMaxWidth()
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Column(
-                    modifier = Modifier.padding(20.dp)
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Text(
+                    text = getGreeting(),
+                    fontSize = 26.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = time,
+                    fontSize = 48.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = date,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp)
                 ) {
 
-                    Text("Next Alarm")
+                    Column(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
 
-                    Spacer(
-                        modifier = Modifier.height(8.dp)
-                    )
+                        Text(
+                            text = "Next Alarm",
+                            style = MaterialTheme.typography.titleMedium
+                        )
 
-                    Text(
-                        text = "No Alarm Set",
-                        fontSize = 20.sp
-                    )
+                        Spacer(
+                            modifier = Modifier.height(8.dp)
+                        )
+
+                        Text(
+                            text = "No Alarm Set",
+                            fontSize = 24.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+
+                        Text(
+                            text = "My Alarms",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(8.dp)
+                        )
+
+                        Text(
+                            text = "No alarms available"
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+fun getGreeting(): String {
+
+    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+    return when {
+        hour < 12 -> "Good Morning ☀️"
+        hour < 17 -> "Good Afternoon 🌤️"
+        else -> "Good Evening 🌙"
     }
 }
