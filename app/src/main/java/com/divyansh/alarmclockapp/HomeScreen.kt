@@ -15,9 +15,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.navigation.NavController
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController
+) {
 
     var currentTime by remember {
         mutableStateOf(Date())
@@ -45,7 +48,11 @@ fun HomeScreen() {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { }
+                onClick = {
+                    navController.navigate(
+                        Screen.AddAlarm.route
+                    )
+                }
             ) {
                 Icon(
                     Icons.Default.AddAlarm,
