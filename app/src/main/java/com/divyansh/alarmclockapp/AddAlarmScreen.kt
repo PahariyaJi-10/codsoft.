@@ -1,25 +1,35 @@
 package com.divyansh.alarmclockapp
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddAlarmScreen() {
 
-    var hour by remember { mutableStateOf("07") }
-    var minute by remember { mutableStateOf("00") }
     var label by remember { mutableStateOf("") }
+    var vibration by remember { mutableStateOf(true) }
+
+    val selectedDays = remember {
+        mutableStateListOf<String>()
+    }
+
+    val days = listOf(
+        "Mon", "Tue", "Wed",
+        "Thu", "Fri", "Sat", "Sun"
+    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(20.dp)
     ) {
 
         Text(
@@ -27,25 +37,21 @@ fun AddAlarmScreen() {
             style = MaterialTheme.typography.headlineMedium
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
-        Row {
+        Text(
+            text = "07:00 AM",
+            fontSize = 48.sp
+        )
 
-            OutlinedTextField(
-                value = hour,
-                onValueChange = { hour = it },
-                label = { Text("Hour") },
-                modifier = Modifier.width(120.dp)
-            )
+        Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            OutlinedTextField(
-                value = minute,
-                onValueChange = { minute = it },
-                label = { Text("Minute") },
-                modifier = Modifier.width(120.dp)
-            )
+        Button(
+            onClick = {
+                // Time Picker later
+            }
+        ) {
+            Text("Pick Time")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -53,17 +59,70 @@ fun AddAlarmScreen() {
         OutlinedTextField(
             value = label,
             onValueChange = { label = it },
-            label = { Text("Alarm Label") },
+            label = {
+                Text("Alarm Label")
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text("Repeat Days")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            days.forEach { day ->
+
+                FilterChip(
+                    selected = day in selectedDays,
+
+                    onClick = {
+
+                        if (day in selectedDays)
+                            selectedDays.remove(day)
+                        else
+                            selectedDays.add(day)
+
+                    },
+
+                    label = {
+                        Text(day)
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text("Vibration")
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Switch(
+                checked = vibration,
+                onCheckedChange = {
+                    vibration = it
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
 
         Button(
             onClick = {
-                // Save Alarm later
-            }
+                // Save later
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
+
             Text("Save Alarm")
         }
     }
