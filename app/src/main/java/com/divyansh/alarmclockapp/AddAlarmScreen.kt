@@ -9,7 +9,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 
+var showTimePicker by remember { mutableStateOf(false) }
+
+val timePickerState = rememberTimePickerState(
+    initialHour = 7,
+    initialMinute = 0,
+    is24Hour = false
+)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddAlarmScreen() {
@@ -40,15 +49,18 @@ fun AddAlarmScreen() {
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
-            text = "07:00 AM",
+            text = String.format(
+                "%02d:%02d",
+                timePickerState.hour,
+                timePickerState.minute
+            ),
             fontSize = 48.sp
         )
-
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = {
-                // Time Picker later
+                showTimePicker = true
             }
         ) {
             Text("Pick Time")
@@ -125,5 +137,41 @@ fun AddAlarmScreen() {
 
             Text("Save Alarm")
         }
+    }
+    if (showTimePicker) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showTimePicker = false
+            },
+
+            confirmButton = {
+
+                TextButton(
+                    onClick = {
+                        showTimePicker = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+
+            dismissButton = {
+
+                TextButton(
+                    onClick = {
+                        showTimePicker = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            },
+
+            text = {
+                TimePicker(
+                    state = timePickerState
+                )
+            }
+        )
     }
 }
