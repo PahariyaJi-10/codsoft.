@@ -1,34 +1,30 @@
 package com.divyansh.alarmclockapp
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
 
-@OptIn(
-    ExperimentalLayoutApi::class,
-    ExperimentalMaterial3Api::class
-)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddAlarmScreen() {
 
-    var showTimePicker by remember {
-        mutableStateOf(false)
+    val context = LocalContext.current
+
+    var selectedHour by remember {
+        mutableStateOf(7)
     }
 
-    val timePickerState = rememberTimePickerState(
-        initialHour = 7,
-        initialMinute = 0,
-        is24Hour = false
-    )
+    var selectedMinute by remember {
+        mutableStateOf(0)
+    }
 
     var label by remember {
         mutableStateOf("")
@@ -63,8 +59,8 @@ fun AddAlarmScreen() {
         Text(
             text = String.format(
                 "%02d:%02d",
-                timePickerState.hour,
-                timePickerState.minute
+                selectedHour,
+                selectedMinute
             ),
             fontSize = 48.sp
         )
@@ -73,7 +69,20 @@ fun AddAlarmScreen() {
 
         Button(
             onClick = {
-                showTimePicker = true
+
+                TimePickerDialog(
+                    context,
+                    { _, hour, minute ->
+
+                        selectedHour = hour
+                        selectedMinute = minute
+
+                    },
+                    selectedHour,
+                    selectedMinute,
+                    false
+                ).show()
+
             }
         ) {
             Text("Pick Time")
@@ -92,7 +101,10 @@ fun AddAlarmScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text("Repeat Days")
+        Text(
+            text = "Repeat Days",
+            style = MaterialTheme.typography.titleMedium
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -106,10 +118,13 @@ fun AddAlarmScreen() {
                     selected = day in selectedDays,
 
                     onClick = {
-                        if (day in selectedDays)
+
+                        if (day in selectedDays) {
                             selectedDays.remove(day)
-                        else
+                        } else {
                             selectedDays.add(day)
+                        }
+
                     },
 
                     label = {
@@ -127,7 +142,9 @@ fun AddAlarmScreen() {
 
             Text("Vibration")
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
 
             Switch(
                 checked = vibration,
@@ -141,46 +158,11 @@ fun AddAlarmScreen() {
 
         Button(
             onClick = {
-                // Save Alarm later
+                // Save Alarm functionality coming next
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save Alarm")
         }
-    }
-
-    if (showTimePicker) {
-
-        AlertDialog(
-            onDismissRequest = {
-                showTimePicker = false
-            },
-
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showTimePicker = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        showTimePicker = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            },
-
-            text = {
-                TimePicker(
-                    state = timePickerState
-                )
-            }
-        )
     }
 }
