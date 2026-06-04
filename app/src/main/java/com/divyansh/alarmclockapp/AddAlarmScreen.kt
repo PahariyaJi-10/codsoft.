@@ -11,10 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun AddAlarmScreen() {
+fun AddAlarmScreen(
+    navController: NavController
+) {
 
     val context = LocalContext.current
 
@@ -158,7 +161,15 @@ fun AddAlarmScreen() {
 
         Button(
             onClick = {
-                // Save Alarm functionality coming next
+
+                AlarmRepository.alarms.add(
+                    Alarm(
+                        hour = selectedHour,
+                        minute = selectedMinute,
+                        label = label
+                    )
+                )
+                navController.popBackStack()
             },
             modifier = Modifier.fillMaxWidth()
         ) {

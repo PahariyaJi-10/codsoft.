@@ -156,9 +156,33 @@ fun HomeScreen(
                             modifier = Modifier.height(8.dp)
                         )
 
-                        Text(
-                            text = "No alarms available"
-                        )
+                        if (AlarmRepository.alarms.isEmpty()) {
+
+                            Text(
+                                text = "No alarms available"
+                            )
+
+                        } else {
+
+                            AlarmRepository.alarms.forEach { alarm ->
+
+                                Spacer(
+                                    modifier = Modifier.height(8.dp)
+                                )
+
+                                Text(
+                                    text = String.format(
+                                        "%02d:%02d",
+                                        alarm.hour,
+                                        alarm.minute
+                                    )
+                                )
+
+                                Text(
+                                    text = alarm.label
+                                )
+                            }
+                        }
                     }
                 }
             }

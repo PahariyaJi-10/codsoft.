@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(Screen.AddAlarm.route) {
-                        AddAlarmScreen()
+                        AddAlarmScreen(navController)
                     }
                 }
             }
