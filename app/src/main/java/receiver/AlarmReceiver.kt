@@ -1,12 +1,12 @@
-package com.divyansh.alarmclockapp.receiver
+package receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import com.divyansh.alarmclockapp.R
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -15,6 +15,19 @@ class AlarmReceiver : BroadcastReceiver() {
         intent: Intent
     ) {
 
+        // Play alarm sound
+        val alarmUri = RingtoneManager.getDefaultUri(
+            RingtoneManager.TYPE_ALARM
+        )
+
+        val ringtone = RingtoneManager.getRingtone(
+            context,
+            alarmUri
+        )
+
+        ringtone.play()
+
+        // Notification
         val channelId = "alarm_channel"
 
         val notificationManager =
@@ -22,15 +35,18 @@ class AlarmReceiver : BroadcastReceiver() {
                 Context.NOTIFICATION_SERVICE
             ) as NotificationManager
 
-        val channel = NotificationChannel(
-            channelId,
-            "Alarm Notifications",
-            NotificationManager.IMPORTANCE_HIGH
-        )
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-        notificationManager.createNotificationChannel(
-            channel
-        )
+            val channel = NotificationChannel(
+                channelId,
+                "Alarm Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+
+            notificationManager.createNotificationChannel(
+                channel
+            )
+        }
 
         val notification =
             NotificationCompat.Builder(
@@ -49,6 +65,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setPriority(
                     NotificationCompat.PRIORITY_HIGH
                 )
+                .setAutoCancel(true)
                 .build()
 
         notificationManager.notify(
