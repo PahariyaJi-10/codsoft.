@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
-
 android {
     namespace = "com.divyansh.alarmclockapp"
     compileSdk = 35
@@ -54,7 +54,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
 
+    ksp("androidx.room:room-compiler:2.7.2")
     // Material Icons
     implementation("androidx.compose.material:material-icons-extended")
 
