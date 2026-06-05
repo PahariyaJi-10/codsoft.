@@ -27,6 +27,15 @@ class AlarmReceiver : BroadcastReceiver() {
 
         ringtone.play()
 
+        android.os.Handler(
+            android.os.Looper.getMainLooper()
+        ).postDelayed({
+
+            ringtone.stop()
+
+        }, 15000)
+
+
         // Notification
         val channelId = "alarm_channel"
 

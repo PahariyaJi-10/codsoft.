@@ -115,6 +115,8 @@ fun HomeScreen(
                     modifier = Modifier.height(40.dp)
                 )
 
+                // NEXT ALARM CARD
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(24.dp)
@@ -147,6 +149,10 @@ fun HomeScreen(
                                 fontSize = 24.sp
                             )
 
+                            Text(
+                                text = nextAlarm.label
+                            )
+
                         } else {
 
                             Text(
@@ -161,6 +167,62 @@ fun HomeScreen(
                     modifier = Modifier.height(24.dp)
                 )
 
+                // STATISTICS CARD
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+
+                        horizontalArrangement =
+                            Arrangement.SpaceEvenly
+                    ) {
+
+                        Column(
+                            horizontalAlignment =
+                                Alignment.CenterHorizontally
+                        ) {
+
+                            Text(
+                                text =
+                                    AlarmRepository.alarms.size.toString(),
+                                style =
+                                    MaterialTheme.typography.headlineMedium
+                            )
+
+                            Text("Total")
+                        }
+
+                        Column(
+                            horizontalAlignment =
+                                Alignment.CenterHorizontally
+                        ) {
+
+                            Text(
+                                text =
+                                    AlarmRepository.alarms.count {
+                                        it.isEnabled
+                                    }.toString(),
+                                style =
+                                    MaterialTheme.typography.headlineMedium
+                            )
+
+                            Text("Active")
+                        }
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
+
+                // MY ALARMS CARD
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(24.dp)
@@ -172,7 +234,8 @@ fun HomeScreen(
 
                         Text(
                             text = "My Alarms",
-                            style = MaterialTheme.typography.titleMedium
+                            style =
+                                MaterialTheme.typography.titleMedium
                         )
 
                         Spacer(
@@ -190,48 +253,60 @@ fun HomeScreen(
                             AlarmRepository.alarms.forEach { alarm ->
 
                                 Spacer(
-                                    modifier = Modifier.height(8.dp)
+                                    modifier =
+                                        Modifier.height(8.dp)
                                 )
 
                                 Card(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier =
+                                        Modifier.fillMaxWidth()
                                 ) {
 
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(12.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+
+                                        verticalAlignment =
+                                            Alignment.CenterVertically
                                     ) {
 
                                         Column(
-                                            modifier = Modifier.weight(1f)
+                                            modifier =
+                                                Modifier.weight(1f)
                                         ) {
 
                                             Text(
-                                                text = String.format(
-                                                    "%02d:%02d",
-                                                    alarm.hour,
-                                                    alarm.minute
-                                                ),
+                                                text =
+                                                    String.format(
+                                                        "%02d:%02d",
+                                                        alarm.hour,
+                                                        alarm.minute
+                                                    ),
                                                 fontSize = 20.sp
                                             )
 
                                             Text(
-                                                text = alarm.label
+                                                text =
+                                                    alarm.label
                                             )
                                         }
 
                                         Row(
-                                            verticalAlignment = Alignment.CenterVertically
+                                            verticalAlignment =
+                                                Alignment.CenterVertically
                                         ) {
 
                                             Switch(
-                                                checked = alarm.isEnabled,
+                                                checked =
+                                                    alarm.isEnabled,
+
                                                 onCheckedChange = {
 
                                                     val index =
-                                                        AlarmRepository.alarms.indexOf(alarm)
+                                                        AlarmRepository.alarms.indexOf(
+                                                            alarm
+                                                        )
 
                                                     AlarmRepository.alarms[index] =
                                                         alarm.copy(
@@ -242,13 +317,17 @@ fun HomeScreen(
 
                                             IconButton(
                                                 onClick = {
-                                                    AlarmRepository.alarms.remove(alarm)
+                                                    AlarmRepository.alarms.remove(
+                                                        alarm
+                                                    )
                                                 }
                                             ) {
 
                                                 Icon(
-                                                    imageVector = Icons.Default.Delete,
-                                                    contentDescription = "Delete Alarm"
+                                                    imageVector =
+                                                        Icons.Default.Delete,
+                                                    contentDescription =
+                                                        "Delete Alarm"
                                                 )
                                             }
                                         }
