@@ -2,8 +2,8 @@ package com.divyansh.alarmclockapp
 
 import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -96,7 +95,9 @@ fun AddAlarmScreen(
 
         OutlinedTextField(
             value = label,
-            onValueChange = { label = it },
+            onValueChange = {
+                label = it
+            },
             label = {
                 Text("Alarm Label")
             },
@@ -120,7 +121,6 @@ fun AddAlarmScreen(
 
                 FilterChip(
                     selected = day in selectedDays,
-
                     onClick = {
 
                         if (day in selectedDays) {
@@ -130,7 +130,6 @@ fun AddAlarmScreen(
                         }
 
                     },
-
                     label = {
                         Text(day)
                     }
@@ -167,17 +166,21 @@ fun AddAlarmScreen(
                     Alarm(
                         hour = selectedHour,
                         minute = selectedMinute,
-                        label = label,
+                        label = if (label.isBlank()) {
+                            "Alarm"
+                        } else {
+                            label
+                        },
                         isEnabled = true
                     )
                 )
+
                 AlarmScheduler.scheduleAlarm(
                     context,
                     selectedHour,
                     selectedMinute
                 )
 
-                navController.popBackStack()
                 navController.popBackStack()
             },
             modifier = Modifier.fillMaxWidth()

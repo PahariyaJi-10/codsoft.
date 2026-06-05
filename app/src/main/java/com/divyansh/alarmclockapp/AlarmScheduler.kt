@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import receiver.AlarmReceiver
+import com.divyansh.alarmclockapp.receiver.AlarmReceiver
 import java.util.Calendar
 
 object AlarmScheduler {
@@ -30,37 +30,22 @@ object AlarmScheduler {
                 context,
                 hour * 100 + minute,
                 intent,
-                PendingIntent.FLAG_IMMUTABLE or
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                        PendingIntent.FLAG_IMMUTABLE
             )
 
         val calendar = Calendar.getInstance()
 
-        calendar.set(
-            Calendar.HOUR_OF_DAY,
-            hour
-        )
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
 
-        calendar.set(
-            Calendar.MINUTE,
-            minute
-        )
-
-        calendar.set(
-            Calendar.SECOND,
-            0
-        )
-
-        if (calendar.timeInMillis <
-            System.currentTimeMillis()
-        ) {
-            calendar.add(
-                Calendar.DAY_OF_MONTH,
-                1
-            )
+        if (calendar.timeInMillis <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        alarmManager.setExactAndAllowWhileIdle(
+        alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             pendingIntent
