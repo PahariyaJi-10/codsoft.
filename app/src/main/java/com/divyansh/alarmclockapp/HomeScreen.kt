@@ -222,16 +222,35 @@ fun HomeScreen(
                                             )
                                         }
 
-                                        IconButton(
-                                            onClick = {
-                                                AlarmRepository.alarms.remove(alarm)
-                                            }
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically
                                         ) {
 
-                                            Icon(
-                                                imageVector = Icons.Default.Delete,
-                                                contentDescription = "Delete Alarm"
+                                            Switch(
+                                                checked = alarm.isEnabled,
+                                                onCheckedChange = {
+
+                                                    val index =
+                                                        AlarmRepository.alarms.indexOf(alarm)
+
+                                                    AlarmRepository.alarms[index] =
+                                                        alarm.copy(
+                                                            isEnabled = it
+                                                        )
+                                                }
                                             )
+
+                                            IconButton(
+                                                onClick = {
+                                                    AlarmRepository.alarms.remove(alarm)
+                                                }
+                                            ) {
+
+                                                Icon(
+                                                    imageVector = Icons.Default.Delete,
+                                                    contentDescription = "Delete Alarm"
+                                                )
+                                            }
                                         }
                                     }
                                 }

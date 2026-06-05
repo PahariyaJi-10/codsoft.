@@ -166,7 +166,8 @@ fun AddAlarmScreen(
                     Alarm(
                         hour = selectedHour,
                         minute = selectedMinute,
-                        label = label
+                        label = label,
+                        isEnabled = true
                     )
                 )
                 navController.popBackStack()
