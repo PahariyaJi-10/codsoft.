@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAlarm
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,12 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.navigation.NavController
-import android.app.TimePickerDialog
-import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun HomeScreen(
@@ -35,17 +34,15 @@ fun HomeScreen(
         }
     }
 
-    val time =
-        SimpleDateFormat(
-            "hh:mm:ss a",
-            Locale.getDefault()
-        ).format(currentTime)
+    val time = SimpleDateFormat(
+        "hh:mm:ss a",
+        Locale.getDefault()
+    ).format(currentTime)
 
-    val date =
-        SimpleDateFormat(
-            "EEEE, dd MMM yyyy",
-            Locale.getDefault()
-        ).format(currentTime)
+    val date = SimpleDateFormat(
+        "EEEE, dd MMM yyyy",
+        Locale.getDefault()
+    ).format(currentTime)
 
     Scaffold(
         floatingActionButton = {
@@ -57,7 +54,7 @@ fun HomeScreen(
                 }
             ) {
                 Icon(
-                    Icons.Default.AddAlarm,
+                    imageVector = Icons.Default.AddAlarm,
                     contentDescription = "Add Alarm"
                 )
             }
@@ -82,11 +79,12 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
-
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(
+                    modifier = Modifier.height(50.dp)
+                )
 
                 Text(
                     text = getGreeting(),
@@ -94,7 +92,9 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(
+                    modifier = Modifier.height(20.dp)
+                )
 
                 Text(
                     text = time,
@@ -102,14 +102,18 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
 
                 Text(
                     text = date,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(
+                    modifier = Modifier.height(40.dp)
+                )
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -129,14 +133,33 @@ fun HomeScreen(
                             modifier = Modifier.height(8.dp)
                         )
 
-                        Text(
-                            text = "No Alarm Set",
-                            fontSize = 24.sp
-                        )
+                        if (AlarmRepository.alarms.isNotEmpty()) {
+
+                            val nextAlarm =
+                                AlarmRepository.alarms.first()
+
+                            Text(
+                                text = String.format(
+                                    "%02d:%02d",
+                                    nextAlarm.hour,
+                                    nextAlarm.minute
+                                ),
+                                fontSize = 24.sp
+                            )
+
+                        } else {
+
+                            Text(
+                                text = "No Alarm Set",
+                                fontSize = 24.sp
+                            )
+                        }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -170,17 +193,48 @@ fun HomeScreen(
                                     modifier = Modifier.height(8.dp)
                                 )
 
-                                Text(
-                                    text = String.format(
-                                        "%02d:%02d",
-                                        alarm.hour,
-                                        alarm.minute
-                                    )
-                                )
+                                Card(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
 
-                                Text(
-                                    text = alarm.label
-                                )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(12.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+
+                                        Column(
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+
+                                            Text(
+                                                text = String.format(
+                                                    "%02d:%02d",
+                                                    alarm.hour,
+                                                    alarm.minute
+                                                ),
+                                                fontSize = 20.sp
+                                            )
+
+                                            Text(
+                                                text = alarm.label
+                                            )
+                                        }
+
+                                        IconButton(
+                                            onClick = {
+                                                AlarmRepository.alarms.remove(alarm)
+                                            }
+                                        ) {
+
+                                            Icon(
+                                                imageVector = Icons.Default.Delete,
+                                                contentDescription = "Delete Alarm"
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -192,7 +246,8 @@ fun HomeScreen(
 
 fun getGreeting(): String {
 
-    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    val hour = Calendar.getInstance()
+        .get(Calendar.HOUR_OF_DAY)
 
     return when {
         hour < 12 -> "Good Morning ☀️"
