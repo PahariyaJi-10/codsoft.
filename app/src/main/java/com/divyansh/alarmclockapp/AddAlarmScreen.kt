@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -170,6 +171,13 @@ fun AddAlarmScreen(
                         isEnabled = true
                     )
                 )
+                AlarmScheduler.scheduleAlarm(
+                    context,
+                    selectedHour,
+                    selectedMinute
+                )
+
+                navController.popBackStack()
                 navController.popBackStack()
             },
             modifier = Modifier.fillMaxWidth()
