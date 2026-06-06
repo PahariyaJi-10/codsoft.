@@ -85,13 +85,7 @@ com.divyansh.alarmclockapp
 6. Alarm sound is played.
 7. Alarm automatically stops after 15 seconds.
 
-## 📸 Screenshots
 
-Add screenshots of:
-
-* Home Screen
-* Add Alarm Screen
-* Alarm Notification
 
 ## 🔮 Future Improvements
 
